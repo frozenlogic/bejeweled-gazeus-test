@@ -10,7 +10,7 @@ public class Cell : MonoBehaviour
 
     private void Awake()
     {
-        //size = currentGem.GetSize(); //cell size = gem sprite size
+
     }
 
     // Start is called before the first frame update
@@ -26,6 +26,7 @@ public class Cell : MonoBehaviour
     public void SetGem(Gem g)
     {
         currentGem = g;
+        g.currentCell = this;
         currentGem.transform.position = transform.position;
     }
 

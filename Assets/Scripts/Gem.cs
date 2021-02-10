@@ -15,6 +15,7 @@ public class Gem : MonoBehaviour
 {
     public int ScoreValue;
     public GemType gemType;
+    public Cell currentCell;
 
     Sprite sprite;
 
@@ -32,5 +33,10 @@ public class Gem : MonoBehaviour
     public float GetSize()
     {
         return sprite.bounds.size.x; //considering Gem sprite is always square
+    }
+
+    private void OnMouseUp()
+    {
+        Debug.Log("UP");
     }
 }
