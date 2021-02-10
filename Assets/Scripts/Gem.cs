@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public enum GemType
 {
@@ -14,10 +15,18 @@ public enum GemType
 public class Gem : MonoBehaviour
 {
     public int ScoreValue;
+    public float Speed;
     public GemType gemType;
     public Cell currentCell;
 
+    bool isMoving = false;
+    Vector3 moveToPosition;
+    float distance;
+    float startTime;
+
     Sprite sprite;
+
+    public UnityEvent<Gem> OnClickedOnGem = new UnityEvent<Gem>();
 
     private void Awake()
     {
@@ -25,9 +34,20 @@ public class Gem : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    void Update()
     {
-        
+        if (isMoving)
+        {
+            transform.position = Vector3.Lerp(transform.position, moveToPosition, (((Time.time - startTime) * Speed )/ distance));
+        }
+    }
+
+    public void MoveTo(Vector3 position)
+    {
+        isMoving = true;
+        distance = Vector3.Distance(transform.position, position);
+        startTime = Time.time;
+        moveToPosition = position;
     }
 
     public float GetSize()
@@ -37,6 +57,8 @@ public class Gem : MonoBehaviour
 
     private void OnMouseUp()
     {
-        Debug.Log("UP");
+        OnClickedOnGem?.Invoke(this);
+
+        //play "selected" animation 
     }
 }

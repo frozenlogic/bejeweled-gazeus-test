@@ -206,6 +206,50 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &696001811
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 696001813}
+  - component: {fileID: 696001812}
+  m_Layer: 0
+  m_Name: MoveValidator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &696001812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 696001811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b7ab2d299ffc6c46a21a7cdd588e0a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridSystem: {fileID: 1920503989}
+--- !u!4 &696001813
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 696001811}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.23310369, y: -0.0766058, z: -689.6503}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1776468113
 GameObject:
   m_ObjectHideFlags: 0
@@ -217,7 +261,7 @@ GameObject:
   - component: {fileID: 1776468115}
   - component: {fileID: 1776468114}
   m_Layer: 0
-  m_Name: bg
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -326,6 +370,10 @@ MonoBehaviour:
   - {fileID: 1275347227482319749, guid: 3382a92d110a51b48ad3682469ccaecc, type: 3}
   - {fileID: 3425601726963602157, guid: 1cbfdbc5bed89bb4a8a8c8e2e83163ce, type: 3}
   - {fileID: 1561764348104616797, guid: 693001e2bd381ad4a9b477864d6b0207, type: 3}
+  currentGemSelection: {fileID: 0}
+  OnGridChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &1920503990
 Transform:
   m_ObjectHideFlags: 0

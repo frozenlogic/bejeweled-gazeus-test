@@ -1,7 +1,17 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
+//stores the current selected gem
+struct Move
+{
+    public Gem currentGemSelection;
+    public Gem previousGemSelection;
+}
+
+//Organizes all gems and keep the current move
 public class GridSystem : MonoBehaviour
 {
     public int height;
@@ -10,11 +20,17 @@ public class GridSystem : MonoBehaviour
     public Cell CellPrefab;
     public Gem[] Gems;
 
-    Cell[,] grid;
+    public Gem currentGemSelection;
+
+    public Cell[,] grid { private set; get; }
+
+    public UnityEvent OnGridChanged = new UnityEvent(); //something has changed in the Grid - pieces were switched
 
     // Start is called before the first frame update
     void Start()
     {
+        //currentMove = new Move();
+
         grid = new Cell[width, height];
 
         for (int i = 0; i < grid.GetLength(0); i++)
@@ -23,10 +39,36 @@ public class GridSystem : MonoBehaviour
             {
                 Cell newCell = GameObject.Instantiate(CellPrefab);
                 newCell.SetWorldPositionInGrid(i, j, transform.position);
-                newCell.SetGem(GameObject.Instantiate(Gems[Random.Range(0, Gems.Length)]));
+                Gem g = GameObject.Instantiate(Gems[UnityEngine.Random.Range(0, Gems.Length)]);
+                g.OnClickedOnGem.AddListener(ClickedOnGem);
+                newCell.SetGem(g);
                 grid[i, j] = newCell;
             }
         }
+    }
+
+    private void ClickedOnGem(Gem g)
+    {
+        if (currentGemSelection)
+        {
+            //check if they are adjacents
+
+            //swap
+            SwapPieces(g);
+        }
+        else
+        {
+            currentGemSelection = g;
+        }
+    }
+
+    private void SwapPieces(Gem g)
+    {
+        Debug.Log("Moving");
+        currentGemSelection.MoveTo(g.transform.position);
+        g.MoveTo(currentGemSelection.transform.position);
+
+        OnGridChanged?.Invoke(); //notifiy the listeners the Grid has new pieces in place
     }
 
     private void FixedUpdate()

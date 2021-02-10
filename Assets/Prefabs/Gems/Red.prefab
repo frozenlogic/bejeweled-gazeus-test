@@ -97,8 +97,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ScoreValue: 20
+  Speed: 2.5
   gemType: 3
   currentCell: {fileID: 0}
+  OnClickedOnGem:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!61 &-4471769349650061167
 BoxCollider2D:
   m_ObjectHideFlags: 0
