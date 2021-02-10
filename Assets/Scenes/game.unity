@@ -217,7 +217,7 @@ GameObject:
   - component: {fileID: 1920503990}
   - component: {fileID: 1920503989}
   m_Layer: 0
-  m_Name: grid
+  m_Name: Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -237,6 +237,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   height: 8
   width: 8
+  CellPrefab: {fileID: 2098618775714521419, guid: b66e944d2ea048241ae428d499d820c4, type: 3}
+  GemPrefab: {fileID: 1129327235360837289, guid: b839b64523095f7419959cf8fab2327c, type: 3}
 --- !u!4 &1920503990
 Transform:
   m_ObjectHideFlags: 0
@@ -245,7 +247,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1920503988}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -2, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

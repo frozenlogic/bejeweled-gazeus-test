@@ -5,7 +5,8 @@ using UnityEngine;
 public class Cell : MonoBehaviour
 {
     public Gem currentGem;
-    public float size = 128;
+    public float size;
+    public float padding;
 
     private void Awake()
     {
@@ -19,12 +20,18 @@ public class Cell : MonoBehaviour
 
     public float GetSize()
     {
-        return size; 
+        return size + padding; 
+    }
+
+    public void SetGem(Gem g)
+    {
+        currentGem = g;
+        currentGem.transform.position = transform.position;
     }
 
     public void SetWorldPositionInGrid(int row, int col, Vector3 pos)
     {
-        transform.position = (new Vector3(row, col, 0) * size) + pos;
+        transform.position = (new Vector3(row, col, 0) * GetSize()) + pos;
     }
 
     public Vector3 GetWorldPosition()

@@ -44,4 +44,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentGem: {fileID: 0}
-  size: 0
+  size: 0.5
+  padding: 0.1

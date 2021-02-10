@@ -2,9 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum GemType
+{
+    Blue,
+    Green,
+    Purple,
+    Red,
+    Yellow
+}
+
 public class Gem : MonoBehaviour
 {
+    public int ScoreValue;
+    public GemType gemType;
+
     Sprite sprite;
+
+    private void Awake()
+    {
+        sprite = GetComponent<Sprite>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
