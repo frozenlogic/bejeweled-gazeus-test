@@ -18,27 +18,62 @@ public class MoveValidator : MonoBehaviour
 
     public void LookUpGrid()
     {
-        //check vertically
-        for (int i = 0; i < gridSystem.grid.GetLength(0); i++)
+        //vertical
+        for (int x = 0; x < gridSystem.grid.GetLength(0); x++)
         {
-            for (int j = 0; j < gridSystem.grid.GetLength(1); j++)
+            for (int y = 0; y < gridSystem.grid.GetLength(1); y++)
             {
-                if (j + 1 >= gridSystem.grid.GetLength(1))
+                if (y + 1 >= gridSystem.grid.GetLength(1))
                 {
                     continue;
                 }
 
-                Validate(i, j, gridSystem.grid.GetLength(1));
+                ValidateVertical(x, y, gridSystem.grid.GetLength(1));
+            }
+        }
+
+        //horizontal
+        for (int y = 0; y < gridSystem.grid.GetLength(1); y++)
+        {
+            for (int x = 0; x < gridSystem.grid.GetLength(0); x++)
+            {
+                if (x + 1 >= gridSystem.grid.GetLength(0))
+                {
+                    continue;
+                }
+
+                ValidateHorizontal(x, y, gridSystem.grid.GetLength(0));
             }
         }
 
         foreach (Gem g in matchesList)
         {
             Debug.Log(g);
+            g.gameObject.SetActive(false);
         }
     }
 
-    void Validate(int x, int y, int length)
+    void ValidateHorizontal(int x, int y, int length)
+    {
+        Gem gem01 = gridSystem.GetCell(x, y).currentGem;
+        Gem gem02 = gridSystem.GetCell(x + 1, y).currentGem;
+
+        if (CheckMatch(gem01, gem02))
+        {
+            if (x + 2 < length)
+            {
+                Gem g = gridSystem.GetCell(x + 2, y).currentGem;
+                if (CheckMatch(gem02, g))
+                {
+                    matchesList.Add(gem01);
+                    matchesList.Add(gem02);
+                    matchesList.Add(g);
+                }
+            }
+        }
+    }
+
+    void ValidateVertical(int x, int y, int length)
     {
         Gem gem01 = gridSystem.GetCell(x, y).currentGem;
         Gem gem02 = gridSystem.GetCell(x, y + 1).currentGem;
