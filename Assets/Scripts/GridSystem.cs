@@ -10,13 +10,53 @@ public class Move
     public Gem currentGemSelection;
     public Gem previousGemSelection;
 
+    public List<Gem> selection;
+
+    int numOfMovingGems = 2;
+
+    public UnityEvent OnMoveEnd = new UnityEvent();
+
     public Move()
     {
+        selection = new List<Gem>();
+    }
 
+    public void AddSelection(Gem g)
+    {
+        g.OnMovementEnd.AddListener(OnGemMovementEnd);
+        selection.Add(g);
+    }
+
+    void OnGemMovementEnd(Gem g)
+    {
+        g.OnMovementEnd.RemoveAllListeners();
+
+        numOfMovingGems--;
+        if (numOfMovingGems == 0)
+        {
+            numOfMovingGems = 2;
+            OnMoveEnd?.Invoke();
+        }
+
+    }
+
+    public bool IsFirstSelection()
+    {
+        return selection.Count > 0 ? false : true;
     }
 
     public void Swap()
     {
+        selection[0].MoveTo(selection[1].transform.position);
+        selection[1].MoveTo(selection[0].transform.position);
+
+        //setting gem to his new cell
+        Cell aux;
+        aux = selection[0].currentCell;
+        selection[0].SetCell(selection[1].currentCell);
+        selection[0].currentCell.SetGem(selection[0]);
+        selection[1].SetCell(aux);
+        selection[1].currentCell.SetGem(selection[1]);
 
     }
 }
@@ -36,6 +76,8 @@ public class GridSystem : MonoBehaviour
 
     public Gem currentGemSelection;
 
+    public Move currentMove;
+
     public Cell[,] Grid { private set; get; }
 
     public UnityEvent OnGridChanged = new UnityEvent(); //something has changed in the Grid - pieces were swaped
@@ -43,11 +85,20 @@ public class GridSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        moveValidator.OnMoveValidated.AddListener(AfterMoveValidated);
 
         Grid = new Cell[width, height];
 
+        currentMove = new Move();
+        currentMove.OnMoveEnd.AddListener(MoveEnd);
+
+        moveValidator.OnMoveValidated.AddListener(AfterMoveValidated);
+
         Fill();
+    }
+
+    private void MoveEnd()
+    {
+        OnGridChanged?.Invoke(); //notifiy the listeners the Grid has new pieces in place
     }
 
     private void AfterMoveValidated(List<Gem> matchesList)
@@ -84,46 +135,19 @@ public class GridSystem : MonoBehaviour
 
     private void ClickedOnGem(Gem g)
     {
-        if (currentGemSelection)
+        if (!currentMove.IsFirstSelection())
         {
             //check if they are adjacents
 
             //swap
-            SwapPieces(g);
+            currentMove.AddSelection(g);
+            currentMove.Swap();
         }
         else
         {
-            currentGemSelection = g;
+            //currentGemSelection = g;
+            currentMove.AddSelection(g);
         }
-    }
-
-    private void SwapPieces(Gem g)
-    {
-        currentGemSelection.OnMovementEnd.AddListener(OnGemMovementEnd);
-        g.OnMovementEnd.AddListener(OnGemMovementEnd);
-        currentGemSelection.MoveTo(g.transform.position);
-        g.MoveTo(currentGemSelection.transform.position);
-
-        //setting gem to his new cell
-        Cell aux;
-        aux = g.currentCell;
-        g.SetCell(currentGemSelection.currentCell);
-        g.currentCell.SetGem(g);
-        currentGemSelection.SetCell(aux);
-        currentGemSelection.currentCell.SetGem(currentGemSelection);
-    }
-
-    private void OnGemMovementEnd(Gem g)
-    {
-        g.OnMovementEnd.RemoveAllListeners();
-
-        numOfGemsInTheMove--;
-        if(numOfGemsInTheMove == 0)
-        {
-            numOfGemsInTheMove = 2;
-            OnGridChanged?.Invoke(); //notifiy the listeners the Grid has new pieces in place
-        }
-
     }
 
     void Update()
