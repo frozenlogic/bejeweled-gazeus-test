@@ -16,11 +16,18 @@ public class MoveValidator : MonoBehaviour
     {
         matchesList = new List<Gem>();
 
-        gridSystem.OnGridChanged.AddListener(LookUpGrid);
+        gridSystem.OnGridChanged.AddListener(GridHasChanged);
     }
 
-    public void LookUpGrid()
+    void GridHasChanged()
     {
+        ResolveGrid();
+    }
+
+    public bool ResolveGrid()
+    {
+        matchesList.Clear();
+
         //vertical
         for (int x = 0; x < gridSystem.Grid.GetLength(0); x++)
         {
@@ -49,7 +56,11 @@ public class MoveValidator : MonoBehaviour
             }
         }
 
+        Debug.Log("Matches " + matchesList.Count);
+
         OnMoveValidated?.Invoke(matchesList);
+
+        return matchesList.Count > 0 ? true : false;
     }
 
     void ValidateHorizontal(int x, int y, int length)
@@ -64,9 +75,18 @@ public class MoveValidator : MonoBehaviour
                 Gem g = gridSystem.GetCell(x + 2, y).currentGem;
                 if (CheckMatch(gem02, g))
                 {
-                    matchesList.Add(gem01);
-                    matchesList.Add(gem02);
-                    matchesList.Add(g);
+                    if (!matchesList.Contains(gem01))
+                    {
+                        matchesList.Add(gem01);
+                    }
+                    if (!matchesList.Contains(gem02))
+                    {
+                        matchesList.Add(gem02);
+                    }
+                    if (!matchesList.Contains(g))
+                    {
+                        matchesList.Add(g);
+                    }
                 }
             }
         }
@@ -84,9 +104,18 @@ public class MoveValidator : MonoBehaviour
                 Gem g = gridSystem.GetCell(x, y + 2).currentGem;
                 if (CheckMatch(gem02, g))
                 {
-                    matchesList.Add(gem01);
-                    matchesList.Add(gem02);
-                    matchesList.Add(g);
+                    if (!matchesList.Contains(gem01))
+                    {
+                        matchesList.Add(gem01);
+                    }
+                    if (!matchesList.Contains(gem02))
+                    {
+                        matchesList.Add(gem02);
+                    }
+                    if (!matchesList.Contains(g))
+                    {
+                        matchesList.Add(g);
+                    }
                 }
             }
         }

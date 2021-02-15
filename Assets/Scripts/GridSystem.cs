@@ -47,17 +47,19 @@ public class Move
 
     public void Swap()
     {
-        selection[0].MoveTo(selection[1].transform.position);
-        selection[1].MoveTo(selection[0].transform.position);
+        if(selection.Count > 0)
+        {
+            selection[0].MoveTo(selection[1].transform.position);
+            selection[1].MoveTo(selection[0].transform.position);
 
-        //setting gem to his new cell
-        Cell aux;
-        aux = selection[0].currentCell;
-        selection[0].SetCell(selection[1].currentCell);
-        selection[0].currentCell.SetGem(selection[0]);
-        selection[1].SetCell(aux);
-        selection[1].currentCell.SetGem(selection[1]);
-
+            //setting gem to his new cell
+            Cell aux;
+            aux = selection[0].currentCell;
+            selection[0].SetCell(selection[1].currentCell);
+            selection[0].currentCell.SetGem(selection[0]);
+            selection[1].SetCell(aux);
+            selection[1].currentCell.SetGem(selection[1]);
+        }
     }
 }
 
@@ -71,8 +73,6 @@ public class GridSystem : MonoBehaviour
 
     public Cell CellPrefab;
     public Gem[] Gems;
-
-    public Gem currentGemSelection;
 
     public Move currentMove;
 
@@ -92,6 +92,16 @@ public class GridSystem : MonoBehaviour
         moveValidator.OnMoveValidated.AddListener(AfterMoveValidated);
 
         Fill();
+        StartGridWithNoMatches();
+    }
+
+    void StartGridWithNoMatches()
+    {
+        if (moveValidator.ResolveGrid())
+        {
+            Fill();
+            StartGridWithNoMatches();
+        }
     }
 
     private void MoveEnd()
@@ -101,12 +111,18 @@ public class GridSystem : MonoBehaviour
 
     private void AfterMoveValidated(List<Gem> matchesList)
     {
+        RemoveMathes(matchesList);
+    }
+
+    void RemoveMathes(List<Gem> matchesList)
+    {
         if (matchesList.Count > 0)
         {
-            foreach (Gem g in matchesList)
+            for (int i = 0; i < matchesList.Count; i++)
             {
-                Debug.Log(g);
+                Gem g = matchesList[i];
                 g.gameObject.SetActive(false);
+                RemoveGemFromCell(g.currentCell);
             }
         }
         else
@@ -121,18 +137,39 @@ public class GridSystem : MonoBehaviour
         {
             for (int j = 0; j < Grid.GetLength(1); j++)
             {
-                if(!GetCell(i, j))
+                Cell cell = GetCell(i, j);
+                if (cell == null)
                 {
                     Cell newCell = GameObject.Instantiate(CellPrefab);
                     newCell.SetWorldPositionInGrid(i, j, transform.position);
-                    Gem g = GameObject.Instantiate(Gems[UnityEngine.Random.Range(0, Gems.Length)]);
+                    newCell.SetGridPosition(i, j);
+                    Gem g = CreateRandomGem();
                     g.OnClickedOnGem.AddListener(ClickedOnGem);
                     newCell.SetGem(g);
                     g.SetCell(newCell);
                     Grid[i, j] = newCell;
+
+                    Debug.Log("Created Cell in" + "[" + i + ", " + j + "]. Created Gem.");
+                }
+                else
+                {
+                    if(cell.currentGem == null)
+                    {
+                        Gem g = CreateRandomGem();
+                        g.OnClickedOnGem.AddListener(ClickedOnGem);
+                        cell.SetGem(g);
+                        g.SetCell(cell);
+
+                        Debug.Log("Created Gem on Cell " + "[" + i + ", " + j + "]");
+                    }
                 }
             }
         }
+    }
+
+    Gem CreateRandomGem()
+    {
+        return GameObject.Instantiate(Gems[UnityEngine.Random.Range(0, Gems.Length)]);
     }
 
     private void ClickedOnGem(Gem g)
@@ -188,6 +225,21 @@ public class GridSystem : MonoBehaviour
         {
             Debug.Log("Couldn't add Gem to Cell " + x + " " + y + " Cell is Null");
         }
+    }
+
+    public void RemoveGemFromCell(int x, int y)
+    {
+        Cell cell = GetCell(x, y);
+
+        if (cell)
+        {
+            cell.RemoveGem();
+        }
+    }
+
+    public void RemoveGemFromCell(Cell cell)
+    {
+        RemoveGemFromCell((int)cell.gridPosition.x, (int)cell.gridPosition.y);
     }
 
     public Cell GetCell(int x, int y)
