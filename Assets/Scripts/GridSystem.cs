@@ -22,7 +22,7 @@ public class GridSystem : MonoBehaviour
 
     public Gem currentGemSelection;
 
-    public Cell[,] grid { private set; get; }
+    public Cell[,] Grid { private set; get; }
 
     public UnityEvent OnGridChanged = new UnityEvent(); //something has changed in the Grid - pieces were switched
 
@@ -31,18 +31,18 @@ public class GridSystem : MonoBehaviour
     {
         //currentMove = new Move();
 
-        grid = new Cell[width, height];
+        Grid = new Cell[width, height];
 
-        for (int i = 0; i < grid.GetLength(0); i++)
+        for (int i = 0; i < Grid.GetLength(0); i++)
         {
-            for (int j = 0; j < grid.GetLength(1); j++)
+            for (int j = 0; j < Grid.GetLength(1); j++)
             {
                 Cell newCell = GameObject.Instantiate(CellPrefab);
                 newCell.SetWorldPositionInGrid(i, j, transform.position);
                 Gem g = GameObject.Instantiate(Gems[UnityEngine.Random.Range(0, Gems.Length)]);
                 g.OnClickedOnGem.AddListener(ClickedOnGem);
                 newCell.SetGem(g);
-                grid[i, j] = newCell;
+                Grid[i, j] = newCell;
             }
         }
     }
@@ -64,7 +64,6 @@ public class GridSystem : MonoBehaviour
 
     private void SwapPieces(Gem g)
     {
-        Debug.Log("Moving");
         currentGemSelection.MoveTo(g.transform.position);
         g.MoveTo(currentGemSelection.transform.position);
 
@@ -78,11 +77,11 @@ public class GridSystem : MonoBehaviour
 
     public void DrawGrid()
     {
-        for (int i = 0; i < grid.GetLength(0); i++)
+        for (int i = 0; i < Grid.GetLength(0); i++)
         {
-            for (int j = 0; j < grid.GetLength(1); j++)
+            for (int j = 0; j < Grid.GetLength(1); j++)
             {
-                if(j + 1 < grid.GetLength(1) && i + 1 < grid.GetLength(0))
+                if(j + 1 < Grid.GetLength(1) && i + 1 < Grid.GetLength(0))
                 {
                     Debug.DrawLine(GetCell(i, j).GetWorldPosition(), GetCell(i, j + 1).GetWorldPosition(), Color.red);
                     Debug.DrawLine(GetCell(i, j).GetWorldPosition(), GetCell(i + 1, j).GetWorldPosition(), Color.red);
@@ -90,7 +89,7 @@ public class GridSystem : MonoBehaviour
             }
         }
 
-        if (grid != null && grid.GetLength(0) > 0)
+        if (Grid != null && Grid.GetLength(0) > 0)
         {
             Debug.DrawLine(GetCell(0, height - 1).GetWorldPosition(), GetCell(width - 1, height - 1).GetWorldPosition(), Color.red);
             Debug.DrawLine(GetCell(width - 1, 0).GetWorldPosition(), GetCell(width - 1, height - 1).GetWorldPosition(), Color.red);
@@ -104,6 +103,6 @@ public class GridSystem : MonoBehaviour
 
     public Cell GetCell(int x, int y)
     {
-        return grid[x, y];
+        return Grid[x, y];
     }
 }

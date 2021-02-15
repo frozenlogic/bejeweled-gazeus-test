@@ -19,30 +19,30 @@ public class MoveValidator : MonoBehaviour
     public void LookUpGrid()
     {
         //vertical
-        for (int x = 0; x < gridSystem.grid.GetLength(0); x++)
+        for (int x = 0; x < gridSystem.Grid.GetLength(0); x++)
         {
-            for (int y = 0; y < gridSystem.grid.GetLength(1); y++)
+            for (int y = 0; y < gridSystem.Grid.GetLength(1); y++)
             {
-                if (y + 1 >= gridSystem.grid.GetLength(1))
+                if (y + 1 >= gridSystem.Grid.GetLength(1))
                 {
                     continue;
                 }
 
-                ValidateVertical(x, y, gridSystem.grid.GetLength(1));
+                ValidateVertical(x, y, gridSystem.Grid.GetLength(1));
             }
         }
 
         //horizontal
-        for (int y = 0; y < gridSystem.grid.GetLength(1); y++)
+        for (int y = 0; y < gridSystem.Grid.GetLength(1); y++)
         {
-            for (int x = 0; x < gridSystem.grid.GetLength(0); x++)
+            for (int x = 0; x < gridSystem.Grid.GetLength(0); x++)
             {
-                if (x + 1 >= gridSystem.grid.GetLength(0))
+                if (x + 1 >= gridSystem.Grid.GetLength(0))
                 {
                     continue;
                 }
 
-                ValidateHorizontal(x, y, gridSystem.grid.GetLength(0));
+                ValidateHorizontal(x, y, gridSystem.Grid.GetLength(0));
             }
         }
 
