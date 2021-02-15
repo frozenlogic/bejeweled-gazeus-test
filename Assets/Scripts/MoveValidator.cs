@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class MoveValidator : MonoBehaviour
 {
     public GridSystem gridSystem;
 
     List<Gem> matchesList;
+
+    public UnityEvent<List<Gem>> OnMoveValidated = new UnityEvent<List<Gem>>();
 
     // Start is called before the first frame update
     void Start()
@@ -46,11 +49,7 @@ public class MoveValidator : MonoBehaviour
             }
         }
 
-        foreach (Gem g in matchesList)
-        {
-            Debug.Log(g);
-            g.gameObject.SetActive(false);
-        }
+        OnMoveValidated?.Invoke(matchesList);
     }
 
     void ValidateHorizontal(int x, int y, int length)

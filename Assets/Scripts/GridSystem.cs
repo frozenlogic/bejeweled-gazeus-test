@@ -5,17 +5,31 @@ using UnityEngine;
 using UnityEngine.Events;
 
 //stores the current selected gem
-struct Move
+public class Move
 {
     public Gem currentGemSelection;
     public Gem previousGemSelection;
+
+    public Move()
+    {
+
+    }
+
+    public void Swap()
+    {
+
+    }
 }
 
 //Organizes all gems and keep the current move
 public class GridSystem : MonoBehaviour
 {
+    public MoveValidator moveValidator;
+
     public int height;
     public int width;
+
+    public int numOfGemsInTheMove = 2;
 
     public Cell CellPrefab;
     public Gem[] Gems;
@@ -24,16 +38,28 @@ public class GridSystem : MonoBehaviour
 
     public Cell[,] Grid { private set; get; }
 
-    public UnityEvent OnGridChanged = new UnityEvent(); //something has changed in the Grid - pieces were switched
+    public UnityEvent OnGridChanged = new UnityEvent(); //something has changed in the Grid - pieces were swaped
 
     // Start is called before the first frame update
     void Start()
     {
-        //currentMove = new Move();
+        moveValidator.OnMoveValidated.AddListener(AfterMoveValidated);
 
         Grid = new Cell[width, height];
 
         Fill();
+    }
+
+    private void AfterMoveValidated(List<Gem> matchesList)
+    {
+        if (matchesList.Count > 0)
+        {
+            foreach (Gem g in matchesList)
+            {
+                Debug.Log(g);
+                g.gameObject.SetActive(false);
+            }
+        }
     }
 
     void Fill()
@@ -49,6 +75,7 @@ public class GridSystem : MonoBehaviour
                     Gem g = GameObject.Instantiate(Gems[UnityEngine.Random.Range(0, Gems.Length)]);
                     g.OnClickedOnGem.AddListener(ClickedOnGem);
                     newCell.SetGem(g);
+                    g.SetCell(newCell);
                     Grid[i, j] = newCell;
                 }
             }
@@ -72,18 +99,39 @@ public class GridSystem : MonoBehaviour
 
     private void SwapPieces(Gem g)
     {
+        currentGemSelection.OnMovementEnd.AddListener(OnGemMovementEnd);
+        g.OnMovementEnd.AddListener(OnGemMovementEnd);
         currentGemSelection.MoveTo(g.transform.position);
         g.MoveTo(currentGemSelection.transform.position);
 
-        OnGridChanged?.Invoke(); //notifiy the listeners the Grid has new pieces in place
+        //setting gem to his new cell
+        Cell aux;
+        aux = g.currentCell;
+        g.SetCell(currentGemSelection.currentCell);
+        g.currentCell.SetGem(g);
+        currentGemSelection.SetCell(aux);
+        currentGemSelection.currentCell.SetGem(currentGemSelection);
     }
 
-    private void FixedUpdate()
+    private void OnGemMovementEnd(Gem g)
+    {
+        g.OnMovementEnd.RemoveAllListeners();
+
+        numOfGemsInTheMove--;
+        if(numOfGemsInTheMove == 0)
+        {
+            numOfGemsInTheMove = 2;
+            OnGridChanged?.Invoke(); //notifiy the listeners the Grid has new pieces in place
+        }
+
+    }
+
+    void Update()
     {
         DrawGrid();
     }
 
-    public void DrawGrid()
+    void DrawGrid()
     {
         for (int i = 0; i < Grid.GetLength(0); i++)
         {

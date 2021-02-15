@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Cell : MonoBehaviour
 {
-    public Gem currentGem;
+    public Gem currentGem { private set; get; }
     public float size;
     public float padding;
 
@@ -26,7 +26,6 @@ public class Cell : MonoBehaviour
     public void SetGem(Gem g)
     {
         currentGem = g;
-        g.currentCell = this;
         currentGem.transform.position = transform.position;
     }
 

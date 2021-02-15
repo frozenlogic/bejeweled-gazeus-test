@@ -17,7 +17,7 @@ public class Gem : MonoBehaviour
     public int ScoreValue;
     public float Speed;
     public GemType gemType;
-    public Cell currentCell;
+    public Cell currentCell { private set; get; }
 
     bool isMoving = false;
     Vector3 moveToPosition;
@@ -27,6 +27,7 @@ public class Gem : MonoBehaviour
     Sprite sprite;
 
     public UnityEvent<Gem> OnClickedOnGem = new UnityEvent<Gem>();
+    public UnityEvent<Gem> OnMovementEnd = new UnityEvent<Gem>();
 
     private void Awake()
     {
@@ -38,7 +39,16 @@ public class Gem : MonoBehaviour
     {
         if (isMoving)
         {
-            transform.position = Vector3.Lerp(transform.position, moveToPosition, (((Time.time - startTime) * Speed )/ distance));
+            float t = ((Time.time - startTime) * Speed) / distance;
+            if(t < 1.0f)
+            {
+                transform.position = Vector3.Lerp(transform.position, moveToPosition, t);
+            }
+            else
+            {
+                isMoving = false;
+                OnMovementEnd?.Invoke(this);
+            }
         }
     }
 
@@ -50,9 +60,9 @@ public class Gem : MonoBehaviour
         moveToPosition = position;
     }
 
-    public float GetSize()
+    public Vector3 GetSize()
     {
-        return sprite.bounds.size.x; //considering Gem sprite is always square
+        return sprite.bounds.extents;
     }
 
     private void OnMouseUp()
@@ -60,5 +70,10 @@ public class Gem : MonoBehaviour
         OnClickedOnGem?.Invoke(this);
 
         //play "selected" animation 
+    }
+
+    public void SetCell(Cell cell)
+    {
+        currentCell = cell;
     }
 }
