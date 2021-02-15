@@ -236,6 +236,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridSystem: {fileID: 1920503989}
+  OnMoveValidated:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &696001813
 Transform:
   m_ObjectHideFlags: 0
@@ -361,6 +364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5056cbffe606ece4a913dd49088fb2b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveValidator: {fileID: 696001812}
   height: 8
   width: 8
   CellPrefab: {fileID: 2098618775714521419, guid: b66e944d2ea048241ae428d499d820c4, type: 3}
@@ -370,7 +374,6 @@ MonoBehaviour:
   - {fileID: 1275347227482319749, guid: 3382a92d110a51b48ad3682469ccaecc, type: 3}
   - {fileID: 3425601726963602157, guid: 1cbfdbc5bed89bb4a8a8c8e2e83163ce, type: 3}
   - {fileID: 1561764348104616797, guid: 693001e2bd381ad4a9b477864d6b0207, type: 3}
-  currentGemSelection: {fileID: 0}
   OnGridChanged:
     m_PersistentCalls:
       m_Calls: []

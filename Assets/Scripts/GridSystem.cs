@@ -7,9 +7,6 @@ using UnityEngine.Events;
 //stores the current selected gem
 public class Move
 {
-    public Gem currentGemSelection;
-    public Gem previousGemSelection;
-
     public List<Gem> selection;
 
     int numOfMovingGems = 2;
@@ -60,6 +57,12 @@ public class Move
             selection[1].SetCell(aux);
             selection[1].currentCell.SetGem(selection[1]);
         }
+    }
+
+    public void Reset()
+    {
+        numOfMovingGems = 2;
+        selection.Clear();
     }
 }
 
@@ -129,6 +132,8 @@ public class GridSystem : MonoBehaviour
         {
             currentMove.Swap();
         }
+
+        currentMove.Reset();
     }
 
     void Fill()
