@@ -33,16 +33,24 @@ public class GridSystem : MonoBehaviour
 
         Grid = new Cell[width, height];
 
+        Fill();
+    }
+
+    void Fill()
+    {
         for (int i = 0; i < Grid.GetLength(0); i++)
         {
             for (int j = 0; j < Grid.GetLength(1); j++)
             {
-                Cell newCell = GameObject.Instantiate(CellPrefab);
-                newCell.SetWorldPositionInGrid(i, j, transform.position);
-                Gem g = GameObject.Instantiate(Gems[UnityEngine.Random.Range(0, Gems.Length)]);
-                g.OnClickedOnGem.AddListener(ClickedOnGem);
-                newCell.SetGem(g);
-                Grid[i, j] = newCell;
+                if(!GetCell(i, j))
+                {
+                    Cell newCell = GameObject.Instantiate(CellPrefab);
+                    newCell.SetWorldPositionInGrid(i, j, transform.position);
+                    Gem g = GameObject.Instantiate(Gems[UnityEngine.Random.Range(0, Gems.Length)]);
+                    g.OnClickedOnGem.AddListener(ClickedOnGem);
+                    newCell.SetGem(g);
+                    Grid[i, j] = newCell;
+                }
             }
         }
     }
@@ -98,7 +106,14 @@ public class GridSystem : MonoBehaviour
 
     public void AddGem(int x, int y, Gem g)
     {
-        GetCell(x, y).SetGem(g);
+        if(GetCell(x, y))
+        {
+            GetCell(x, y).SetGem(g);
+        }
+        else
+        {
+            Debug.Log("Couldn't add Gem to Cell " + x + " " + y + " Cell is Null");
+        }
     }
 
     public Cell GetCell(int x, int y)
