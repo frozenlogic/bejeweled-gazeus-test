@@ -52,12 +52,12 @@ public class Gem : MonoBehaviour
         }
     }
 
-    public void MoveTo(Vector3 position)
+    public void MoveTo(Vector3 targetPos)
     {
         isMoving = true;
-        distance = Vector3.Distance(transform.position, position);
+        distance = Vector3.Distance(transform.position, targetPos);
         startTime = Time.time;
-        moveToPosition = position;
+        moveToPosition = targetPos;
     }
 
     public Vector3 GetSize()

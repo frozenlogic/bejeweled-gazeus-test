@@ -69,8 +69,6 @@ public class GridSystem : MonoBehaviour
     public int height;
     public int width;
 
-    public int numOfGemsInTheMove = 2;
-
     public Cell CellPrefab;
     public Gem[] Gems;
 
@@ -110,6 +108,10 @@ public class GridSystem : MonoBehaviour
                 Debug.Log(g);
                 g.gameObject.SetActive(false);
             }
+        }
+        else
+        {
+            currentMove.Swap();
         }
     }
 
