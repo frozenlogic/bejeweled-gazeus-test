@@ -18,27 +18,44 @@ public class MoveValidator : MonoBehaviour
 
     public void LookUpGrid()
     {
-        Validate();
-    }
-
-    void Validate()
-    {
         //check vertically
         for (int i = 0; i < gridSystem.grid.GetLength(0); i++)
         {
             for (int j = 0; j < gridSystem.grid.GetLength(1); j++)
             {
-                Gem gem01 = gridSystem.GetCell(i, j).currentGem;
-                Gem gem02 = gridSystem.GetCell(i, j + 1).currentGem;
-
-                if (CheckMatch(gem01, gem02))
+                if (j + 1 >= gridSystem.grid.GetLength(1))
                 {
-                    matchesList.Add(gem01);
-                    matchesList.Add(gem02);
+                    continue;
                 }
+
+                Validate(i, j, gridSystem.grid.GetLength(1));
             }
         }
 
+        foreach (Gem g in matchesList)
+        {
+            Debug.Log(g);
+        }
+    }
+
+    void Validate(int x, int y, int length)
+    {
+        Gem gem01 = gridSystem.GetCell(x, y).currentGem;
+        Gem gem02 = gridSystem.GetCell(x, y + 1).currentGem;
+
+        if (CheckMatch(gem01, gem02))
+        {
+            if (y + 2 < length)
+            {
+                Gem g = gridSystem.GetCell(x, y + 2).currentGem;
+                if (CheckMatch(gem02, g))
+                {
+                    matchesList.Add(gem01);
+                    matchesList.Add(gem02);
+                    matchesList.Add(g);
+                }
+            }
+        }
     }
 
     bool CheckMatch(Gem gem01, Gem gem02)
