@@ -76,24 +76,32 @@ public class GridSystem : MonoBehaviour
 
     public Cell CellPrefab;
     public Gem[] Gems;
+    public List<Cell> emptyCells;
 
     public Move currentMove;
 
     public Cell[,] Grid { private set; get; }
 
+    bool isStartingGrid;
+
     public UnityEvent OnGridChanged = new UnityEvent(); //something has changed in the Grid - pieces were swaped
+
+    private void Awake()
+    {
+        Grid = new Cell[width, height];
+
+        emptyCells = new List<Cell>();
+
+        currentMove = new Move();
+        currentMove.OnMoveEnd.AddListener(MoveEnd);
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-
-        Grid = new Cell[width, height];
-
-        currentMove = new Move();
-        currentMove.OnMoveEnd.AddListener(MoveEnd);
-
         moveValidator.OnMoveValidated.AddListener(AfterMoveValidated);
 
+        isStartingGrid = true;
         Fill();
         StartGridWithNoMatches();
     }
@@ -105,6 +113,9 @@ public class GridSystem : MonoBehaviour
             Fill();
             StartGridWithNoMatches();
         }
+
+        isStartingGrid = false;
+        emptyCells.Clear();
     }
 
     private void MoveEnd()
@@ -126,6 +137,7 @@ public class GridSystem : MonoBehaviour
                 Gem g = matchesList[i];
                 g.gameObject.SetActive(false);
                 RemoveGemFromCell(g.currentCell);
+                emptyCells.Add(g.currentCell);
             }
         }
         else
@@ -134,6 +146,11 @@ public class GridSystem : MonoBehaviour
         }
 
         currentMove.Reset();
+
+        if (!isStartingGrid)
+        {
+            MoveCells();
+        }
     }
 
     void Fill()
@@ -168,6 +185,17 @@ public class GridSystem : MonoBehaviour
                         Debug.Log("Created Gem on Cell " + "[" + i + ", " + j + "]");
                     }
                 }
+            }
+        }
+    }
+
+    void MoveCells()
+    {
+        foreach(Cell cell in emptyCells)//for every empty cell, we move down all gems that are above it
+        {
+            for (int i = (int)cell.gridPosition.y + 1; i < Grid.GetLength(1); i++) //iterate over Y
+            {
+                GetCell((int)cell.gridPosition.x, i).currentGem.MoveTo(GetCell((int)cell.gridPosition.x, i - 1).GetWorldPosition());
             }
         }
     }
