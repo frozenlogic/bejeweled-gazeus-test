@@ -195,25 +195,11 @@ public class GridSystem : MonoBehaviour
         {
             for (int i = (int)cell.gridPosition.y + 1; i < Grid.GetLength(1); i++) //iterate over Y
             {
-                //if (IsCellAboveMeEmpty((int)cell.gridPosition.x, i))
-                //{
-                //    Cell c = GetNextEmptyCell((int)cell.gridPosition.x, i);
-                //}
-                //else
-                //{
-
                 Cell fromCell = GetCell((int)cell.gridPosition.x, i);
                 Cell targetCell = null;
                 Cell c = null;
-                if(IsCellAboveMeEmpty((int)cell.gridPosition.x, (int)cell.gridPosition.y))
-                {
-                    GetNextEmptyCell((int)cell.gridPosition.x, i, out c);
-                    targetCell = c;
-                }
-                else
-                {
-                    targetCell = GetCell((int)cell.gridPosition.x, i - 1);
-                }
+                GetNextEmptyCell((int)cell.gridPosition.x, i, out c);
+                targetCell = c;
 
                 if (fromCell.currentGem)
                 {
@@ -226,20 +212,8 @@ public class GridSystem : MonoBehaviour
                 {
                     break;
                 }
-                //}
             }
-        }
-        
-        /*
-        Cell targetCell;
-        for (int x = 0; x < Grid.GetLength(0); x++)
-        {
-            for (int y = 0; y < Grid.GetLength(1); y++)
-            {
-                targetCell = GetNextEmptyCell(x, y);
-            }
-        }
-        */
+        }        
     }
 
     void GetNextEmptyCell(int x, int y, out Cell c)

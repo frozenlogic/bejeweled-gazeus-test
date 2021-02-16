@@ -22,7 +22,7 @@ public class Gem : MonoBehaviour
     bool isMoving = false;
     Vector3 targetPosition;
     Vector3 startPosition; 
-    float lerpDuration = 2.0f;
+    float lerpDuration = 0.3f;
     float timeElapsed;
 
     Sprite sprite;
