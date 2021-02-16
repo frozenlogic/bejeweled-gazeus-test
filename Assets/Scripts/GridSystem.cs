@@ -190,13 +190,31 @@ public class GridSystem : MonoBehaviour
 
     void MoveCells()
     {
-        /*
+        
         foreach(Cell cell in emptyCells)//for every empty cell, we move down all gems that are above it
         {
             for (int i = (int)cell.gridPosition.y + 1; i < Grid.GetLength(1); i++) //iterate over Y
             {
+                //if (IsCellAboveMeEmpty((int)cell.gridPosition.x, i))
+                //{
+                //    Cell c = GetNextEmptyCell((int)cell.gridPosition.x, i);
+                //}
+                //else
+                //{
+
                 Cell fromCell = GetCell((int)cell.gridPosition.x, i);
-                Cell targetCell = GetCell((int)cell.gridPosition.x, i - 1);
+                Cell targetCell = null;
+                Cell c = null;
+                if(IsCellAboveMeEmpty((int)cell.gridPosition.x, (int)cell.gridPosition.y))
+                {
+                    GetNextEmptyCell((int)cell.gridPosition.x, i, out c);
+                    targetCell = c;
+                }
+                else
+                {
+                    targetCell = GetCell((int)cell.gridPosition.x, i - 1);
+                }
+
                 if (fromCell.currentGem)
                 {
                     fromCell.currentGem.MoveTo(targetCell.GetWorldPosition());
@@ -208,36 +226,56 @@ public class GridSystem : MonoBehaviour
                 {
                     break;
                 }
+                //}
             }
         }
-        */
-
+        
+        /*
         Cell targetCell;
-        for (int x = Grid.GetLength(0) - 1; x > 0; x--)
+        for (int x = 0; x < Grid.GetLength(0); x++)
         {
-            for (int y = Grid.GetLength(1) - 1; y > 0; y--)
+            for (int y = 0; y < Grid.GetLength(1); y++)
             {
                 targetCell = GetNextEmptyCell(x, y);
             }
         }
+        */
     }
 
-    Cell GetNextEmptyCell(int x, int y)
+    void GetNextEmptyCell(int x, int y, out Cell c)
     {
-        Cell targetCell = null;
-        if(IsCellEmptyUnderMe(x, y))
+        c = null;
+        if(IsCellUnderMeEmpty(x, y))
         {
             Cell nextCell = GetCell(x, y - 1);
-            targetCell = GetNextEmptyCell((int)nextCell.gridPosition.x, (int)nextCell.gridPosition.y);
+            GetNextEmptyCell((int)nextCell.gridPosition.x, (int)nextCell.gridPosition.y, out c);
         }
-
-        return targetCell;
+        else
+        {
+            c = GetCell(x, y);
+        }
     }
 
-    bool IsCellEmptyUnderMe(int x, int y)
+    bool IsCellAboveMeEmpty(int x, int y)
     {
-        Cell c = GetCell(x, y - 1);
-        return c.IsEmpty();
+        bool isEmpty = false;
+        if(y + 1 < Grid.GetLength(1))
+        {
+            Cell c = GetCell(x, y + 1);
+            isEmpty = c.IsEmpty();
+        }
+        return isEmpty;
+    }
+
+    bool IsCellUnderMeEmpty(int x, int y)
+    {
+        bool isEmpty = false;
+        if (y - 1 > 0)
+        {
+            Cell c = GetCell(x, y - 1);
+            isEmpty = c.IsEmpty();
+        }
+        return isEmpty;
     }
 
     Gem CreateRandomGem()
