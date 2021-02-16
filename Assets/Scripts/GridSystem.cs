@@ -125,10 +125,10 @@ public class GridSystem : MonoBehaviour
 
     private void AfterMoveValidated(List<Gem> matchesList)
     {
-        RemoveMathes(matchesList);
+        RemoveMatches(matchesList);
     }
 
-    void RemoveMathes(List<Gem> matchesList)
+    void RemoveMatches(List<Gem> matchesList)
     {
         if (matchesList.Count > 0)
         {
