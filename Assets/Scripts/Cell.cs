@@ -27,7 +27,10 @@ public class Cell : MonoBehaviour
     public void SetGem(Gem g)
     {
         currentGem = g;
-        currentGem.transform.position = transform.position;
+        if (currentGem)
+        {
+            currentGem.transform.position = transform.position;
+        }
     }
 
     public void RemoveGem()

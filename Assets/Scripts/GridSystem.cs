@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -150,6 +148,7 @@ public class GridSystem : MonoBehaviour
         if (!isStartingGrid)
         {
             MoveCells();
+            Fill();
         }
     }
 
@@ -195,7 +194,15 @@ public class GridSystem : MonoBehaviour
         {
             for (int i = (int)cell.gridPosition.y + 1; i < Grid.GetLength(1); i++) //iterate over Y
             {
-                GetCell((int)cell.gridPosition.x, i).currentGem.MoveTo(GetCell((int)cell.gridPosition.x, i - 1).GetWorldPosition());
+                Cell fromCell = GetCell((int)cell.gridPosition.x, i);
+                Cell targetCell = GetCell((int)cell.gridPosition.x, i - 1);
+                if (fromCell && targetCell && fromCell.currentGem && targetCell.currentGem)
+                {
+                    fromCell.currentGem.MoveTo(targetCell.GetWorldPosition());
+                    targetCell.SetGem(fromCell.currentGem);
+                    targetCell.currentGem.SetCell(targetCell);
+                    fromCell.SetGem(null);
+                }
             }
         }
     }
