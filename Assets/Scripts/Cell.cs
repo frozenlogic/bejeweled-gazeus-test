@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -35,6 +36,7 @@ public class Cell : MonoBehaviour
 
     public void RemoveGem()
     {
+        Debug.Log("Removing Gem on Cell " + gridPosition.x + ", " + gridPosition.y);
         Destroy(currentGem.gameObject);
         currentGem = null;
     }
@@ -52,5 +54,10 @@ public class Cell : MonoBehaviour
     public void SetGridPosition(int x, int y)
     {
         gridPosition = new Vector2(x, y);
+    }
+
+    public bool IsEmpty()
+    {
+        return currentGem == null ? true : false;
     }
 }

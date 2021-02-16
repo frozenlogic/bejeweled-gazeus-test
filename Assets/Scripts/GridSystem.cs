@@ -148,7 +148,7 @@ public class GridSystem : MonoBehaviour
         if (!isStartingGrid)
         {
             MoveCells();
-            Fill();
+            //Fill();
         }
     }
 
@@ -190,21 +190,54 @@ public class GridSystem : MonoBehaviour
 
     void MoveCells()
     {
+        /*
         foreach(Cell cell in emptyCells)//for every empty cell, we move down all gems that are above it
         {
             for (int i = (int)cell.gridPosition.y + 1; i < Grid.GetLength(1); i++) //iterate over Y
             {
                 Cell fromCell = GetCell((int)cell.gridPosition.x, i);
                 Cell targetCell = GetCell((int)cell.gridPosition.x, i - 1);
-                if (fromCell && targetCell && fromCell.currentGem && targetCell.currentGem)
+                if (fromCell.currentGem)
                 {
                     fromCell.currentGem.MoveTo(targetCell.GetWorldPosition());
                     targetCell.SetGem(fromCell.currentGem);
                     targetCell.currentGem.SetCell(targetCell);
                     fromCell.SetGem(null);
                 }
+                else
+                {
+                    break;
+                }
             }
         }
+        */
+
+        Cell targetCell;
+        for (int x = Grid.GetLength(0) - 1; x > 0; x--)
+        {
+            for (int y = Grid.GetLength(1) - 1; y > 0; y--)
+            {
+                targetCell = GetNextEmptyCell(x, y);
+            }
+        }
+    }
+
+    Cell GetNextEmptyCell(int x, int y)
+    {
+        Cell targetCell = null;
+        if(IsCellEmptyUnderMe(x, y))
+        {
+            Cell nextCell = GetCell(x, y - 1);
+            targetCell = GetNextEmptyCell((int)nextCell.gridPosition.x, (int)nextCell.gridPosition.y);
+        }
+
+        return targetCell;
+    }
+
+    bool IsCellEmptyUnderMe(int x, int y)
+    {
+        Cell c = GetCell(x, y - 1);
+        return c.IsEmpty();
     }
 
     Gem CreateRandomGem()

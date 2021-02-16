@@ -20,9 +20,10 @@ public class Gem : MonoBehaviour
     public Cell currentCell { private set; get; }
 
     bool isMoving = false;
-    Vector3 moveToPosition;
-    float distance;
-    float startTime;
+    Vector3 targetPosition;
+    Vector3 startPosition; 
+    float lerpDuration = 2.0f;
+    float timeElapsed;
 
     Sprite sprite;
 
@@ -39,6 +40,7 @@ public class Gem : MonoBehaviour
     {
         if (isMoving)
         {
+            /*
             float t = ((Time.time - startTime) * Speed) / distance;
             if(t < 1.0f)
             {
@@ -49,15 +51,28 @@ public class Gem : MonoBehaviour
                 isMoving = false;
                 OnMovementEnd?.Invoke(this);
             }
+            */
+
+            if (timeElapsed < 1.0f)
+            {
+                transform.position = Vector3.Lerp(startPosition, targetPosition, timeElapsed);
+                timeElapsed += Time.deltaTime / lerpDuration;
+            }
+            else
+            {
+                transform.position = targetPosition;
+                isMoving = false;
+                timeElapsed = 0.0f;
+                OnMovementEnd?.Invoke(this);
+            }
         }
     }
 
     public void MoveTo(Vector3 targetPos)
     {
         isMoving = true;
-        distance = Vector3.Distance(transform.position, targetPos);
-        startTime = Time.time;
-        moveToPosition = targetPos;
+        startPosition = transform.position;
+        targetPosition = targetPos;
     }
 
     public Vector3 GetSize()
