@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -148,7 +149,6 @@ public class GridSystem : MonoBehaviour
         if (!isStartingGrid)
         {
             MoveCells();
-            //Fill();
         }
     }
 
@@ -164,6 +164,7 @@ public class GridSystem : MonoBehaviour
                     Cell newCell = GameObject.Instantiate(CellPrefab);
                     newCell.SetWorldPositionInGrid(i, j, transform.position);
                     newCell.SetGridPosition(i, j);
+                    newCell.name = string.Format("{0} x {1} - Cell", i, j);
                     Gem g = CreateRandomGem();
                     g.OnClickedOnGem.AddListener(ClickedOnGem);
                     newCell.SetGem(g);
@@ -174,7 +175,7 @@ public class GridSystem : MonoBehaviour
                 }
                 else
                 {
-                    if(cell.currentGem == null)
+                    if(cell.IsEmpty())
                     {
                         Gem g = CreateRandomGem();
                         g.OnClickedOnGem.AddListener(ClickedOnGem);
@@ -186,11 +187,13 @@ public class GridSystem : MonoBehaviour
                 }
             }
         }
+
+        Debug.Log("Grid Filling is Done");
     }
 
     void MoveCells()
     {
-        
+        bool first = true;
         foreach(Cell cell in emptyCells)//for every empty cell, we move down all gems that are above it
         {
             for (int i = (int)cell.gridPosition.y + 1; i < Grid.GetLength(1); i++) //iterate over Y
@@ -204,6 +207,11 @@ public class GridSystem : MonoBehaviour
                 if (fromCell.currentGem)
                 {
                     fromCell.currentGem.MoveTo(targetCell.GetWorldPosition());
+                    if (first)
+                    {
+                        first = false;
+                        fromCell.currentGem.OnMovementEnd.AddListener(GemMovementIsDone);
+                    }
                     targetCell.SetGem(fromCell.currentGem);
                     targetCell.currentGem.SetCell(targetCell);
                     fromCell.SetGem(null);
@@ -213,7 +221,16 @@ public class GridSystem : MonoBehaviour
                     break;
                 }
             }
-        }        
+        }
+
+        emptyCells.Clear();
+    }
+
+    private void GemMovementIsDone(Gem gem)
+    {
+        gem.OnMovementEnd.RemoveAllListeners();
+        Fill();
+        moveValidator.ResolveGrid();
     }
 
     void GetNextEmptyCell(int x, int y, out Cell c)

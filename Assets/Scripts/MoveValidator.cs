@@ -7,7 +7,7 @@ public class MoveValidator : MonoBehaviour
 {
     public GridSystem gridSystem;
 
-    List<Gem> matchesList;
+    public List<Gem> matchesList;
 
     public UnityEvent<List<Gem>> OnMoveValidated = new UnityEvent<List<Gem>>();
 

@@ -21,8 +21,8 @@ public class Gem : MonoBehaviour
 
     bool isMoving = false;
     Vector3 targetPosition;
-    Vector3 startPosition; 
-    float lerpDuration = 0.3f;
+    Vector3 startPosition;
+    float lerpDuration = 2.0f;//0.3f;
     float timeElapsed;
 
     Sprite sprite;
@@ -40,19 +40,6 @@ public class Gem : MonoBehaviour
     {
         if (isMoving)
         {
-            /*
-            float t = ((Time.time - startTime) * Speed) / distance;
-            if(t < 1.0f)
-            {
-                transform.position = Vector3.Lerp(transform.position, moveToPosition, t);
-            }
-            else
-            {
-                isMoving = false;
-                OnMovementEnd?.Invoke(this);
-            }
-            */
-
             if (timeElapsed < 1.0f)
             {
                 transform.position = Vector3.Lerp(startPosition, targetPosition, timeElapsed);
