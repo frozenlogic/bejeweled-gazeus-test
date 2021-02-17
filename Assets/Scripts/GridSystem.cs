@@ -8,6 +8,7 @@ using UnityEngine.Events;
 public class GridSystem : MonoBehaviour
 {
     public MoveValidator moveValidator;
+    public GameObject selectionSprite;
 
     public int height;
     public int width;
@@ -290,6 +291,9 @@ public class GridSystem : MonoBehaviour
             return;
         }
 
+        selectionSprite.gameObject.SetActive(true);
+        selectionSprite.transform.position = g.currentCell.GetWorldPosition();
+
         if (!currentMove.IsFirstSelection())
         {
             //check if they are adjacents
@@ -307,10 +311,13 @@ public class GridSystem : MonoBehaviour
                 //swap
                 currentMove.AddSelection(g);
                 currentMove.Swap();
+
+                selectionSprite.gameObject.SetActive(false);
             }
             else
             {
                 currentMove.Reset();
+                currentMove.AddSelection(g);
             }
         }
         else
