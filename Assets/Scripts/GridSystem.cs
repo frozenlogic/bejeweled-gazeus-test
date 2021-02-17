@@ -193,9 +193,15 @@ public class GridSystem : MonoBehaviour
 
     void MoveCells()
     {
-        bool first = true;
+        bool firstToMove = true;
+        bool isTopRow = false;
         foreach(Cell cell in emptyCells)//for every empty cell, we move down all gems that are above it
         {
+            if (cell.gridPosition.y == 7)
+            {
+                isTopRow = true;
+            }
+
             for (int i = (int)cell.gridPosition.y + 1; i < Grid.GetLength(1); i++) //iterate over Y
             {
                 Cell fromCell = GetCell((int)cell.gridPosition.x, i);
@@ -207,9 +213,9 @@ public class GridSystem : MonoBehaviour
                 if (fromCell.currentGem)
                 {
                     fromCell.currentGem.MoveTo(targetCell.GetWorldPosition());
-                    if (first)
+                    if (firstToMove)
                     {
-                        first = false;
+                        firstToMove = false;
                         fromCell.currentGem.OnMovementEnd.AddListener(GemMovementIsDone);
                     }
                     targetCell.SetGem(fromCell.currentGem);
@@ -224,6 +230,14 @@ public class GridSystem : MonoBehaviour
         }
 
         emptyCells.Clear();
+
+        Debug.Log("Is Top Row? " + isTopRow);
+
+        if (isTopRow)
+        {
+            Fill();
+            moveValidator.ResolveGrid();
+        }
     }
 
     private void GemMovementIsDone(Gem gem)
