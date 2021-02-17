@@ -345,16 +345,20 @@ public class GridSystem : MonoBehaviour
             {
                 if(j + 1 < Grid.GetLength(1) && i + 1 < Grid.GetLength(0))
                 {
-                    Debug.DrawLine(GetCell(i, j).GetWorldPosition(), GetCell(i, j + 1).GetWorldPosition(), Color.red);
-                    Debug.DrawLine(GetCell(i, j).GetWorldPosition(), GetCell(i + 1, j).GetWorldPosition(), Color.red);
+                    Debug.DrawLine(GetCell(i, j).GetWorldPosition() - new Vector3(GetCell(i, j ).GetSize() / 2, GetCell(i, j).GetSize() / 2, 0), 
+                        GetCell(i, j + 1).GetWorldPosition() - new Vector3(GetCell(i, j + 1).GetSize() / 2, GetCell(i, j + 1).GetSize() / 2, 0), Color.red);
+                    Debug.DrawLine(GetCell(i, j).GetWorldPosition() - new Vector3(GetCell(i, j).GetSize() / 2, GetCell(i, j).GetSize() / 2, 0), 
+                        GetCell(i + 1, j).GetWorldPosition() - new Vector3(GetCell(i + 1, j).GetSize() / 2, GetCell(i + 1, j).GetSize() / 2, 0), Color.red);
                 }
             }
         }
 
         if (Grid != null && Grid.GetLength(0) > 0)
         {
-            Debug.DrawLine(GetCell(0, height - 1).GetWorldPosition(), GetCell(width - 1, height - 1).GetWorldPosition(), Color.red);
-            Debug.DrawLine(GetCell(width - 1, 0).GetWorldPosition(), GetCell(width - 1, height - 1).GetWorldPosition(), Color.red);
+            Debug.DrawLine(GetCell(0, height - 1).GetWorldPosition() + new Vector3(-GetCell(0, height - 1).GetSize() / 2, GetCell(0, height - 1).GetSize() / 2, 0), 
+                GetCell(width - 1, height - 1).GetWorldPosition() + new Vector3(GetCell(0, height - 1).GetSize() / 2, GetCell(width - 1, height - 1).GetSize() / 2, 0), Color.red);
+            Debug.DrawLine(GetCell(width - 1, 0).GetWorldPosition() + new Vector3(GetCell(width - 1, 0).GetSize() / 2, -GetCell(width - 1, 0).GetSize() / 2, 0)
+                , GetCell(width - 1, height - 1).GetWorldPosition() + new Vector3(GetCell(width - 1, height - 1).GetSize() / 2, GetCell(width - 1, height - 1).GetSize() / 2, 0), Color.red);
         }
     }
 
