@@ -86,6 +86,7 @@ public class GridSystem : MonoBehaviour
     bool CanMakeMovement = true;
 
     public UnityEvent OnGridChanged = new UnityEvent(); //something has changed in the Grid - pieces were swaped
+    public UnityEvent<int> OnGemRemoved = new UnityEvent<int>();
 
     private void Awake()
     {
@@ -138,6 +139,10 @@ public class GridSystem : MonoBehaviour
             {
                 Gem g = matchesList[i];
                 g.gameObject.SetActive(false);
+                if (!isStartingGrid)
+                {
+                    OnGemRemoved?.Invoke(g.ScoreValue);
+                }
                 RemoveGemFromCell(g.currentCell);
                 emptyCells.Add(g.currentCell);
                 yield return new WaitForSeconds(0.5f);
