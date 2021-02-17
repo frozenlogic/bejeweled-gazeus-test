@@ -293,10 +293,18 @@ public class GridSystem : MonoBehaviour
         if (!currentMove.IsFirstSelection())
         {
             //check if they are adjacents
+            Cell firstSelection = currentMove.selection[0].currentCell;
+            Cell secondSelection = g.currentCell;
 
-            //swap
-            currentMove.AddSelection(g);
-            currentMove.Swap();
+            Vector2 p = Vector2.Perpendicular((secondSelection.gridPosition - firstSelection.gridPosition).normalized);
+
+            if (p.x == -1 || p.x == 1 || p.y == 1 || p.y == -1)
+            {
+                Debug.Log("Adjacent");
+                //swap
+                currentMove.AddSelection(g);
+                currentMove.Swap();
+            }
         }
         else
         {
