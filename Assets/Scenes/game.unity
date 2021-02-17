@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 234150380}
   - component: {fileID: 234150379}
   - component: {fileID: 234150378}
+  - component: {fileID: 234150381}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -206,6 +207,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &234150381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 234150377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f8c758b8f045c041977f75939959b69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bg: {fileID: 1776468114}
 --- !u!1 &696001811
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,6 +250,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridSystem: {fileID: 1920503989}
+  matchesList: []
   OnMoveValidated:
     m_PersistentCalls:
       m_Calls: []
@@ -315,7 +330,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 5.625, y: 10}
+  m_Size: {x: 5.625, y: 20}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -374,6 +389,7 @@ MonoBehaviour:
   - {fileID: 1275347227482319749, guid: 3382a92d110a51b48ad3682469ccaecc, type: 3}
   - {fileID: 3425601726963602157, guid: 1cbfdbc5bed89bb4a8a8c8e2e83163ce, type: 3}
   - {fileID: 1561764348104616797, guid: 693001e2bd381ad4a9b477864d6b0207, type: 3}
+  emptyCells: []
   OnGridChanged:
     m_PersistentCalls:
       m_Calls: []
