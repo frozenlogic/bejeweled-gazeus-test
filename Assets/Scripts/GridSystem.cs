@@ -127,7 +127,6 @@ public class GridSystem : MonoBehaviour
 
     private void AfterMoveValidated(List<Gem> matchesList)
     {
-        //RemoveMatches(matchesList);
         StartCoroutine(RemoveMatches(matchesList));
     }
 
