@@ -103,12 +103,15 @@ public class GridSystem : MonoBehaviour
     {
         for (int i = 0; i < Grid.GetLength(0); i++)
         {
+            bool isDarkCell = i % 2 == 0 ? false : true;
             for (int j = 0; j < Grid.GetLength(1); j++)
             {
                 Cell cell = GetCell(i, j);
                 if (cell == null)
                 {
                     Cell newCell = GameObject.Instantiate(CellPrefab);
+                    isDarkCell = !isDarkCell;
+                    newCell.SetSprite(isDarkCell);
                     newCell.SetWorldPosition(i, j, transform.position);
                     newCell.SetGridPosition(i, j);
                     newCell.name = string.Format("{0} x {1} - Cell", i, j);

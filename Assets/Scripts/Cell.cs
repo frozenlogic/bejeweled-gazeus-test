@@ -8,16 +8,14 @@ public class Cell : MonoBehaviour
     public Gem currentGem;
     public float size;
     public float padding;
+    public Sprite spriteDark;
+    public Sprite spriteLight;
 
     public Vector2 gridPosition { private set; get; }
-
-    private void Awake()
+    
+    public void SetSprite(bool isDark)
     {
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
+        GetComponent<SpriteRenderer>().sprite = isDark ? spriteDark : spriteLight;
     }
 
     public float GetSize()
