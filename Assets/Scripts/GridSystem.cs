@@ -108,7 +108,7 @@ public class GridSystem : MonoBehaviour
                 if (cell == null)
                 {
                     Cell newCell = GameObject.Instantiate(CellPrefab);
-                    newCell.SetWorldPositionInGrid(i, j, transform.position);
+                    newCell.SetWorldPosition(i, j, transform.position);
                     newCell.SetGridPosition(i, j);
                     newCell.name = string.Format("{0} x {1} - Cell", i, j);
                     Gem g = CreateRandomGem();

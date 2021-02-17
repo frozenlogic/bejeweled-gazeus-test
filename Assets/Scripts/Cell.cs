@@ -41,7 +41,7 @@ public class Cell : MonoBehaviour
         currentGem = null;
     }
 
-    public void SetWorldPositionInGrid(int row, int col, Vector3 pos)
+    public void SetWorldPosition(int row, int col, Vector3 pos)
     {
         transform.position = (new Vector3(row, col, 0) * GetSize()) + pos;
     }
