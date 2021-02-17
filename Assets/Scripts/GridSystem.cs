@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -82,6 +83,7 @@ public class GridSystem : MonoBehaviour
     public Cell[,] Grid { private set; get; }
 
     bool isStartingGrid;
+    bool CanMakeMovement = true;
 
     public UnityEvent OnGridChanged = new UnityEvent(); //something has changed in the Grid - pieces were swaped
 
@@ -124,10 +126,11 @@ public class GridSystem : MonoBehaviour
 
     private void AfterMoveValidated(List<Gem> matchesList)
     {
-        RemoveMatches(matchesList);
+        //RemoveMatches(matchesList);
+        StartCoroutine(RemoveMatches(matchesList));
     }
 
-    void RemoveMatches(List<Gem> matchesList)
+    private IEnumerator RemoveMatches(List<Gem> matchesList)
     {
         if (matchesList.Count > 0)
         {
@@ -137,6 +140,7 @@ public class GridSystem : MonoBehaviour
                 g.gameObject.SetActive(false);
                 RemoveGemFromCell(g.currentCell);
                 emptyCells.Add(g.currentCell);
+                yield return new WaitForSeconds(0.5f);
             }
         }
         else
@@ -238,6 +242,8 @@ public class GridSystem : MonoBehaviour
             Fill();
             moveValidator.ResolveGrid();
         }
+
+        CanMakeMovement = true;
     }
 
     private void GemMovementIsDone(Gem gem)
@@ -245,6 +251,8 @@ public class GridSystem : MonoBehaviour
         gem.OnMovementEnd.RemoveAllListeners();
         Fill();
         moveValidator.ResolveGrid();
+
+        CanMakeMovement = true;
     }
 
     void GetNextEmptyCell(int x, int y, out Cell c)
@@ -290,6 +298,11 @@ public class GridSystem : MonoBehaviour
 
     private void ClickedOnGem(Gem g)
     {
+        if (!CanMakeMovement)
+        {
+            return;
+        }
+
         if (!currentMove.IsFirstSelection())
         {
             //check if they are adjacents
@@ -301,6 +314,9 @@ public class GridSystem : MonoBehaviour
             if (p.x == -1 || p.x == 1 || p.y == 1 || p.y == -1)
             {
                 Debug.Log("Adjacent");
+
+                CanMakeMovement = false;
+
                 //swap
                 currentMove.AddSelection(g);
                 currentMove.Swap();
