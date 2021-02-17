@@ -152,9 +152,7 @@ public class GridSystem : MonoBehaviour
             {
                 Cell fromCell = GetCell((int)cell.gridPosition.x, i);
                 Cell targetCell = null;
-                Cell c = null;
-                GetNextEmptyCell((int)cell.gridPosition.x, i, out c);
-                targetCell = c;
+                GetNextEmptyCell((int)cell.gridPosition.x, i, out targetCell);
 
                 if (fromCell.currentGem)
                 {
@@ -274,36 +272,6 @@ public class GridSystem : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        DrawGrid();
-    }
-
-    void DrawGrid()
-    {
-        for (int i = 0; i < Grid.GetLength(0); i++)
-        {
-            for (int j = 0; j < Grid.GetLength(1); j++)
-            {
-                if(j + 1 < Grid.GetLength(1) && i + 1 < Grid.GetLength(0))
-                {
-                    Debug.DrawLine(GetCell(i, j).GetWorldPosition() - new Vector3(GetCell(i, j ).GetSize() / 2, GetCell(i, j).GetSize() / 2, 0), 
-                        GetCell(i, j + 1).GetWorldPosition() - new Vector3(GetCell(i, j + 1).GetSize() / 2, GetCell(i, j + 1).GetSize() / 2, 0), Color.red);
-                    Debug.DrawLine(GetCell(i, j).GetWorldPosition() - new Vector3(GetCell(i, j).GetSize() / 2, GetCell(i, j).GetSize() / 2, 0), 
-                        GetCell(i + 1, j).GetWorldPosition() - new Vector3(GetCell(i + 1, j).GetSize() / 2, GetCell(i + 1, j).GetSize() / 2, 0), Color.red);
-                }
-            }
-        }
-
-        if (Grid != null && Grid.GetLength(0) > 0)
-        {
-            Debug.DrawLine(GetCell(0, height - 1).GetWorldPosition() + new Vector3(-GetCell(0, height - 1).GetSize() / 2, GetCell(0, height - 1).GetSize() / 2, 0), 
-                GetCell(width - 1, height - 1).GetWorldPosition() + new Vector3(GetCell(0, height - 1).GetSize() / 2, GetCell(width - 1, height - 1).GetSize() / 2, 0), Color.red);
-            Debug.DrawLine(GetCell(width - 1, 0).GetWorldPosition() + new Vector3(GetCell(width - 1, 0).GetSize() / 2, -GetCell(width - 1, 0).GetSize() / 2, 0)
-                , GetCell(width - 1, height - 1).GetWorldPosition() + new Vector3(GetCell(width - 1, height - 1).GetSize() / 2, GetCell(width - 1, height - 1).GetSize() / 2, 0), Color.red);
-        }
-    }
-
     public void AddGem(int x, int y, Gem g)
     {
         if(GetCell(x, y))
@@ -334,5 +302,35 @@ public class GridSystem : MonoBehaviour
     public Cell GetCell(int x, int y)
     {
         return Grid[x, y];
+    }
+
+    void Update()
+    {
+        DrawGrid();
+    }
+
+    void DrawGrid()
+    {
+        for (int i = 0; i < Grid.GetLength(0); i++)
+        {
+            for (int j = 0; j < Grid.GetLength(1); j++)
+            {
+                if (j + 1 < Grid.GetLength(1) && i + 1 < Grid.GetLength(0))
+                {
+                    Debug.DrawLine(GetCell(i, j).GetWorldPosition() - new Vector3(GetCell(i, j).GetSize() / 2, GetCell(i, j).GetSize() / 2, 0),
+                        GetCell(i, j + 1).GetWorldPosition() - new Vector3(GetCell(i, j + 1).GetSize() / 2, GetCell(i, j + 1).GetSize() / 2, 0), Color.red);
+                    Debug.DrawLine(GetCell(i, j).GetWorldPosition() - new Vector3(GetCell(i, j).GetSize() / 2, GetCell(i, j).GetSize() / 2, 0),
+                        GetCell(i + 1, j).GetWorldPosition() - new Vector3(GetCell(i + 1, j).GetSize() / 2, GetCell(i + 1, j).GetSize() / 2, 0), Color.red);
+                }
+            }
+        }
+
+        if (Grid != null && Grid.GetLength(0) > 0)
+        {
+            Debug.DrawLine(GetCell(0, height - 1).GetWorldPosition() + new Vector3(-GetCell(0, height - 1).GetSize() / 2, GetCell(0, height - 1).GetSize() / 2, 0),
+                GetCell(width - 1, height - 1).GetWorldPosition() + new Vector3(GetCell(0, height - 1).GetSize() / 2, GetCell(width - 1, height - 1).GetSize() / 2, 0), Color.red);
+            Debug.DrawLine(GetCell(width - 1, 0).GetWorldPosition() + new Vector3(GetCell(width - 1, 0).GetSize() / 2, -GetCell(width - 1, 0).GetSize() / 2, 0)
+                , GetCell(width - 1, height - 1).GetWorldPosition() + new Vector3(GetCell(width - 1, height - 1).GetSize() / 2, GetCell(width - 1, height - 1).GetSize() / 2, 0), Color.red);
+        }
     }
 }
