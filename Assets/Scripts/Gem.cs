@@ -22,7 +22,7 @@ public class Gem : MonoBehaviour
     bool isMoving = false;
     Vector3 targetPosition;
     Vector3 startPosition;
-    float lerpDuration = 2.0f;//0.3f;
+    float lerpDuration = 0.3f;//2.0f;
     float timeElapsed;
 
     Sprite sprite;
@@ -55,11 +55,12 @@ public class Gem : MonoBehaviour
         }
     }
 
-    public void MoveTo(Vector3 targetPos)
+    public void MoveTo(Vector3 targetPos, float duration)
     {
         isMoving = true;
         startPosition = transform.position;
         targetPosition = targetPos;
+        lerpDuration = duration;
     }
 
     public Vector3 GetSize()

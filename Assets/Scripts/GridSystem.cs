@@ -45,8 +45,8 @@ public class Move
     {
         if(selection.Count > 0)
         {
-            selection[0].MoveTo(selection[1].transform.position);
-            selection[1].MoveTo(selection[0].transform.position);
+            selection[0].MoveTo(selection[1].transform.position, 0.3f);
+            selection[1].MoveTo(selection[0].transform.position, 0.3f);
 
             //setting gem to his new cell
             Cell aux;
@@ -212,7 +212,7 @@ public class GridSystem : MonoBehaviour
 
                 if (fromCell.currentGem)
                 {
-                    fromCell.currentGem.MoveTo(targetCell.GetWorldPosition());
+                    fromCell.currentGem.MoveTo(targetCell.GetWorldPosition(), 1.0f);
                     if (firstToMove)
                     {
                         firstToMove = false;
@@ -275,7 +275,7 @@ public class GridSystem : MonoBehaviour
     bool IsCellUnderMeEmpty(int x, int y)
     {
         bool isEmpty = false;
-        if (y - 1 > 0)
+        if (y - 1 >= 0)
         {
             Cell c = GetCell(x, y - 1);
             isEmpty = c.IsEmpty();
@@ -305,10 +305,13 @@ public class GridSystem : MonoBehaviour
                 currentMove.AddSelection(g);
                 currentMove.Swap();
             }
+            else
+            {
+                currentMove.Reset();
+            }
         }
         else
         {
-            //currentGemSelection = g;
             currentMove.AddSelection(g);
         }
     }
