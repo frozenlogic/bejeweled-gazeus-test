@@ -137,6 +137,35 @@ public class GridSystem : MonoBehaviour
         Debug.Log("Grid Filling is Done");
     }
 
+    void FillEmptyCells(List<Cell> emptyCells)
+    {
+        bool firstToMove = true;
+        foreach (Cell cell in emptyCells)
+        {
+            Gem g = CreateRandomGem();
+            g.OnClickedOnGem.AddListener(ClickedOnGem);
+            if (firstToMove)
+            {
+                firstToMove = false;
+                g.OnMovementEnd.AddListener(OnNewGemReachedEmptyCell);
+            }
+            cell.SetGem(g);
+            g.SetCell(cell);
+            g.transform.position = new Vector3(cell.GetWorldPosition().x, cell.GetWorldPosition().y + cell.GetSize(), 0);
+            g.MoveTo(cell.GetWorldPosition(), 1.0f);
+        }
+
+        emptyCells.Clear();
+    }
+
+    private void OnNewGemReachedEmptyCell(Gem gem)
+    {
+        gem.OnMovementEnd.RemoveAllListeners();
+        moveValidator.ResolveGrid();
+
+        CanMakeMovement = true;
+    }
+
     void MoveCells()
     {
         bool firstToMove = true;
@@ -179,18 +208,36 @@ public class GridSystem : MonoBehaviour
 
         if (isTopRow)
         {
-            Fill();
-            moveValidator.ResolveGrid();
+            FillEmptyCells(GetEmptyCells());
+            //moveValidator.ResolveGrid();
         }
 
         CanMakeMovement = true;
     }
 
+    List<Cell> GetEmptyCells()
+    {
+        List<Cell> emptyCells = new List<Cell>();
+
+        for (int i = 0; i < Grid.GetLength(0); i++)
+        {
+            for (int j = 0; j < Grid.GetLength(1); j++)
+            {
+                Cell cell = GetCell(i, j);
+                if (cell.IsEmpty())
+                {
+                    emptyCells.Add(cell);
+                }
+            }
+        }
+
+        return emptyCells;
+    }
+
     private void GemMovementIsDone(Gem gem)
     {
         gem.OnMovementEnd.RemoveAllListeners();
-        Fill();
-        moveValidator.ResolveGrid();
+        FillEmptyCells(GetEmptyCells());
 
         CanMakeMovement = true;
     }
